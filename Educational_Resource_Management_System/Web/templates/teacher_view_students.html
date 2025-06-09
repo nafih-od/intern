@@ -1,0 +1,82 @@
+{% include 'teacher_header.html' %}
+
+<style>
+    /* Form container styles */
+    form {
+        background-color: #f9f9f9;
+        border: 2px solid #ccc;
+        border-radius: 10px;
+        padding: 20px;
+        max-width: 600px;
+        margin: 20px auto;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Card container */
+    .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 30px;
+    }
+
+    /* Individual card styling */
+    .student-card {
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        width: 300px;
+        text-align: center;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .student-card:hover {
+        transform: scale(1.05);
+    }
+
+    .student-card h3 {
+        color: #007bff;
+        margin-bottom: 10px;
+    }
+
+    .student-card p {
+        color: #333;
+        font-size: 1rem;
+        margin: 5px 0;
+    }
+
+    .chat-btn {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 8px 15px;
+        background-color: #28a745;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 0.9rem;
+        transition: background 0.3s ease-in-out;
+    }
+
+    .chat-btn:hover {
+        background-color: #218838;
+    }
+</style>
+
+<center style="margin-top: 7%; padding-top: 4%; margin-bottom: 20%;">
+    <h2 style="margin-bottom: 2%;">Students</h2>
+    
+    <div class="card-container">
+        {% for i in data['view'] %}
+        <div class="student-card">
+            <h3>{{ i['name'] }}</h3>
+            <p><strong>Course:</strong> {{ i['course'] }}</p>
+            <p><strong>Semester:</strong> {{ i['sem'] }}</p>
+            <a href="/chat?id={{ i['login_id'] }}&name={{ i['name'] }}&action='chat'" class="chat-btn">Chat</a>
+        </div>
+        {% endfor %}
+    </div>
+</center>
+
+{% include 'footer.html' %}
