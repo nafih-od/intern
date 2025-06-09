@@ -1,0 +1,356 @@
+{% include 'teacher_header.html' %}
+
+
+<style>
+    /* Form container styles */
+    form {
+        background-color: #f9f9f9;
+        border: 2px solid #ccc;
+        border-radius: 10px;
+        padding: 20px;
+        max-width: 600px;
+        margin: 20px auto;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    table {
+        width: 100%;
+    }
+
+    /* Table cells styles */
+    td {
+        padding: 10px;
+        font-size: 1rem;
+        color: #010407;
+    }
+
+    /* Input styles */
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 1rem;
+    }
+
+    /* Submit and Update button styles */
+    input[type="submit"] {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1rem;
+    }
+
+    /* Hover effects for the buttons */
+    input[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+
+    /* Spacing between fields */
+    td input {
+        margin-top: 5px;
+        margin-bottom: 10px;
+    }
+
+    /* Headings or labels */
+    td:first-child {
+        font-weight: bold;
+    }
+
+    /* Card styling for student details */
+    .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .card {
+        background: #f9f9f9;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 300px;
+        padding: 20px;
+        text-align: center;
+        border-left: 5px solid #03A9F4;
+        transition: 0.3s;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+    }
+
+    .card h3 {
+        color: #03A9F4;
+        margin-bottom: 10px;
+    }
+
+    .card p {
+        margin: 5px 0;
+        font-size: 1rem;
+        color: #333;
+    }
+
+    .card .btn {
+        margin-top: 10px;
+        display: inline-block;
+        text-decoration: none;
+        padding: 8px 12px;
+        border-radius: 5px;
+        font-size: 0.9rem;
+        transition: 0.3s;
+    }
+
+    .btn-update {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .btn-delete {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .btn:hover {
+        opacity: 0.8;
+    }
+
+
+    
+    /* Form container styles */
+    form {
+        background-color: #f9f9f9;
+        border: 2px solid #ccc;
+        border-radius: 10px;
+        padding: 20px;
+        max-width: 600px;
+        margin: 20px auto;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    table {
+        width: 100%;
+    }
+
+    /* Table cells styles */
+    td {
+        padding: 10px;
+        font-size: 1rem;
+        color: #010407;
+    }
+
+    /* Input styles */
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 1rem;
+    }
+
+    /* Submit and Update button styles */
+    input[type="submit"] {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1rem;
+    }
+
+    /* Hover effects for the buttons */
+    input[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+
+    /* Spacing between fields */
+    td input {
+        margin-top: 5px;
+        margin-bottom: 10px;
+    }
+
+    /* Headings or labels */
+    td:first-child {
+        font-weight: bold;
+    }
+
+</style>
+
+
+<center style=" padding-top: 4%; ">
+    <h2>Add Student</h2><br>
+    <form method="post" >
+        {% if data['up'] %}
+        <table>
+            <tr>
+                <td><label>Select Course</label></td>
+                <td ><select name="course_id" >
+                    {% for i in data['view'] %}
+                        <option value="{{i['course_id']}}">{{i['course']}}</option> 
+                    {% endfor %}
+                </select></td>
+            </tr>
+            <tr>
+                <td >Sem</td>
+                <td>
+                    <select name="sem">
+                        <option value="S1">S1</option> 
+                        <option value="S2">S2</option> 
+                        <option value="S3">S3</option> 
+                        <option value="S4">S4</option> 
+                        <option value="S5">S5</option> 
+                        <option value="S6">S6</option> 
+                        <option value="S7">S7</option> 
+                        <option value="S8">S8</option> 
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td >Name</td>
+                <td><input type="text" name="name" value="{{data['up'][0]['name']}}" ></td>
+            </tr>
+            <tr>
+                <td >Place</td>
+                <td><input type="text" name="place" value="{{data['up'][0]['place']}}" ></td>
+            </tr>
+            <tr>
+                <td >Phone</td>
+                <td><input type="text" name="phone" value="{{data['up'][0]['phone']}}" ></td>
+            </tr>
+            <tr>
+                <td >Email</td>
+                <td><input type="email" name="email" value="{{data['up'][0]['email']}}" ></td>
+            </tr>
+        </table>
+        <input type="submit" value="Update" name="update">
+        {% else %}
+
+        <table>
+            <tr>
+                <td><label>Select Course</label></td>
+                <td ><select name="course_id" >
+                    {% for i in data['view'] %}
+                        <option value="{{i['course_id']}}">{{i['course']}}</option> 
+                    {% endfor %}
+                </select></td>
+            </tr>
+            <tr>
+                <td >Sem</td>
+                <td>
+                    <select name="sem">
+                        <option value="S1">S1</option> 
+                        <option value="S2">S2</option> 
+                        <option value="S3">S3</option> 
+                        <option value="S4">S4</option> 
+                        <option value="S5">S5</option> 
+                        <option value="S6">S6</option> 
+                        <option value="S7">S7</option> 
+                        <option value="S8">S8</option> 
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td >Name</td>
+                <td><input type="text" name="name" id="alpha" required></td>
+            </tr>
+            <tr>
+                <td >Place</td>
+                <td><input type="text" name="place" id="alpha" required></td>
+            </tr>
+            <tr>
+                <td >Phone</td>
+                <td><input type="text" name="phone" id="phone" required></td>
+            </tr>
+            <tr>
+                <td >Email</td>
+                <td><input type="email" name="email"  required></td>
+            </tr>
+            <tr>
+                <td >Username</td>
+                <td><input type="text" name="username"  required></td>
+            </tr>
+            <tr>
+                <td >Password</td>
+                <td><input type="password" name="password" id="password" required></td>
+            </tr>
+        </table>
+        <input type="submit" value="Add" name="submit">        
+ </form>
+
+
+ <script>
+    // Common validation function
+    function alpha(field) {
+        const value = field.value;
+        const regex = /^[a-zA-Z]+$/; // Allows only alphabetic characters (letters)
+        
+        if (!regex.test(value)) {
+            field.setCustomValidity(`${field.name.charAt(0).toUpperCase() + field.name.slice(1)} must contain only letters.`);
+        } else {
+            field.setCustomValidity('');
+        }
+    }
+
+    // Add event listener for all fields with the class "alpha"
+    document.querySelectorAll('.alpha').forEach(field => {
+        field.addEventListener('input', function() {
+            alpha(this);
+        });
+    });
+
+
+    document.getElementById('phone').addEventListener('input', function() {
+        const phone = this.value;
+        const phoneRegex = /^\d{10}$/; // Allows exactly 10 digits
+        
+        if (!phoneRegex.test(phone)) {
+            this.setCustomValidity('Phone number must be exactly 10 digits and contain only numbers.');
+        } else {
+            this.setCustomValidity('');
+        }
+    });
+
+
+    document.getElementById('password').addEventListener('input', function() {
+        const password = this.value;
+        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{4,}$/;
+        // At least 4 characters, 1 letter, 1 number, 1 special character
+
+        if (!passwordRegex.test(password)) {
+            this.setCustomValidity('Password must be at least 4 characters long and contain at least one letter, one number, and one special character.');
+        } else {
+            this.setCustomValidity('');
+        }
+    });
+</script>
+
+<center style="padding-top: 7%; padding-bottom: 19%;">
+    <h2 style=" margin-bottom: 2%;">Students</h2>
+    <div class="card-container">
+        {% for j in data1['view_d'] %}
+        <div class="card">
+            <h3>{{j['name']}}</h3>
+            <p><strong>Course:</strong> {{j['course']}}</p>
+            <p><strong>Semester:</strong> {{j['sem']}}</p>
+            <p><strong>Place:</strong> {{j['place']}}</p>
+            <p><strong>Phone:</strong> {{j['phone']}}</p>
+            <p><strong>Email:</strong> {{j['email']}}</p>
+            <a href="?action=update&id={{j['login_id']}}" class="btn btn-update">Update</a>
+            <a href="?action=delete&id={{j['login_id']}}" class="btn btn-delete">Delete</a>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+</center>
+
+{% include 'footer.html' %}

@@ -1,0 +1,398 @@
+{% include 'teacher_header.html' %}
+
+<style>
+    /* Professional styling for MCQ system */
+    :root {
+        --primary: #2c3e50;
+        --secondary: #3498db;
+        --success: #27ae60;
+        --danger: #e74c3c;
+        --light: #ecf0f1;
+        --dark: #2c3e50;
+        --border: #d9d9d9;
+        --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f8f9fa;
+        color: #333;
+        line-height: 1.6;
+    }
+    
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 15px;
+    }
+    
+    .card {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: var(--shadow);
+        margin-bottom: 25px;
+        overflow: hidden;
+    }
+    
+    .card-header {
+        background-color: var(--primary);
+        color: white;
+        padding: 15px 20px;
+        font-weight: 600;
+        font-size: 1.2rem;
+        border-bottom: 1px solid var(--border);
+    }
+    
+    .card-body {
+        padding: 25px;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: var(--dark);
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        font-size: 1rem;
+        transition: border-color 0.3s;
+    }
+    
+    .form-control:focus {
+        border-color: var(--secondary);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.25);
+    }
+    
+    .question-block {
+        background-color: #f8f9fa;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+    
+    .question-header {
+        background-color: var(--secondary);
+        color: white;
+        padding: 8px 15px;
+        border-radius: 4px;
+        margin-bottom: 15px;
+        font-weight: 500;
+    }
+    
+    .option-group {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-bottom: 15px;
+    }
+    
+    .answer-score-group {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+    
+    .btn {
+        display: inline-block;
+        font-weight: 500;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        user-select: none;
+        border: 1px solid transparent;
+        padding: 10px 20px;
+        font-size: 1rem;
+        line-height: 1.5;
+        border-radius: 4px;
+        transition: all 0.2s;
+        cursor: pointer;
+    }
+    
+    .btn-primary {
+        color: #fff;
+        background-color: var(--secondary);
+        border-color: var(--secondary);
+    }
+    
+    .btn-primary:hover {
+        background-color: #2980b9;
+        border-color: #2980b9;
+    }
+    
+    .btn-success {
+        color: #fff;
+        background-color: var(--success);
+        border-color: var(--success);
+    }
+    
+    .btn-success:hover {
+        background-color: #219653;
+        border-color: #219653;
+    }
+    
+    .btn-danger {
+        color: #fff;
+        background-color: var(--danger);
+        border-color: var(--danger);
+    }
+    
+    .btn-danger:hover {
+        background-color: #c0392b;
+        border-color: #c0392b;
+    }
+    
+    .btn-sm {
+        padding: 5px 10px;
+        font-size: 0.875rem;
+    }
+    
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+    
+    .table th, .table td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid var(--border);
+    }
+    
+    .table th {
+        background-color: var(--primary);
+        color: white;
+        font-weight: 500;
+    }
+    
+    .table tr:hover {
+        background-color: rgba(52, 152, 219, 0.1);
+    }
+    
+    .text-center {
+        text-align: center;
+    }
+    
+    .mb-4 {
+        margin-bottom: 1.5rem;
+    }
+    
+    .action-buttons {
+        display: flex;
+        gap: 8px;
+    }
+    
+    /* Animations */
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    
+    .fade-in {
+        animation: fadeIn 0.5s;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .option-group, .answer-score-group {
+            grid-template-columns: 1fr;
+        }
+        
+        .table {
+            font-size: 0.9rem;
+        }
+    }
+</style>
+
+<div class="container" style="padding-top: 30px;">
+    {% if data2['up'] %}
+    <div class="card fade-in">
+        <div class="card-header">Update Assessment Set</div>
+        <div class="card-body">
+            <form method="post">
+                <div class="form-group">
+                    <label class="form-label">Title</label>
+                    <input type="text" class="form-control" name="title" value="{{ data2['up'][0]['title'] }}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <input type="text" class="form-control" name="description" value="{{ data2['up'][0]['description'] }}" required>
+                </div>
+                
+                {% for i in data2['up'] %}
+                <div class="question-block">
+                    <div class="question-header">Question {{ loop.index }}</div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Question</label>
+                        <input type="text" class="form-control" name="question{{ loop.index }}" value="{{ i['question'] }}" required>
+                    </div>
+                    
+                    <div class="option-group">
+                        <div class="form-group">
+                            <label class="form-label">Option 1</label>
+                            <input type="text" class="form-control" name="option1{{ loop.index }}" value="{{ i['option_1'] }}" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Option 2</label>
+                            <input type="text" class="form-control" name="option2{{ loop.index }}" value="{{ i['option_2'] }}" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Option 3</label>
+                        <input type="text" class="form-control" name="option3{{ loop.index }}" value="{{ i['option_3'] }}" required>
+                    </div>
+                    
+                    <div class="answer-score-group">
+                        <div class="form-group">
+                            <label class="form-label">Answer</label>
+                            <input type="text" class="form-control" name="answer{{ loop.index }}" value="{{ i['answer'] }}" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Score</label>
+                            <input type="text" class="form-control" name="score{{ loop.index }}" value="{{ i['score'] }}" required>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary" name="update">Update Assessment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% else %}
+    <div class="card fade-in">
+        <div class="card-header">Add Assessment</div>
+        <div class="card-body">
+            <form method="post" id="questionForm">
+                <div class="form-group">
+                    <label class="form-label">Title</label>
+                    <input type="text" class="form-control" name="title" placeholder="Enter assessment title" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <input type="text" class="form-control" name="desc" placeholder="Enter assessment description" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Number of Questions</label>
+                    <input type="number" class="form-control" id="questionCount" name="questionCount" min="1" placeholder="Enter number of questions" required>
+                </div>
+                
+                <div id="questionsContainer" class="fade-in"></div>
+                
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success" name="submit">Add Assessment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+    
+    <div class="card fade-in">
+        <div class="card-header">Assessment Sets</div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in data['view'] %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ i['title'] }}</td>
+                            <td>{{ i['description'] }}</td>
+                            <td>{{ i['date'] }}</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a href="/teacher_view_question_answer?id={{ i['assessment_id'] }}" class="btn btn-primary btn-sm">View</a>
+                                    <a href="?action=update&id={{ i['assessment_id'] }}" class="btn btn-success btn-sm">Edit</a>
+                                    <a href="?action=delete&id={{ i['assessment_id'] }}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this assessment?')">Delete</a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Function to generate question and answer input fields based on count
+    document.getElementById('questionCount').addEventListener('input', function() {
+        const count = parseInt(this.value) || 0;
+        const container = document.getElementById('questionsContainer');
+        container.innerHTML = ''; // Clear previous inputs
+        
+        for (let i = 1; i <= count; i++) {
+            const questionDiv = document.createElement('div');
+            questionDiv.className = 'question-block fade-in';
+            questionDiv.innerHTML = `
+                <div class="question-header">Question ${i}</div>
+                
+                <div class="form-group">
+                    <label class="form-label">Question</label>
+                    <input type="text" class="form-control" name="question${i}" placeholder="Enter question ${i}" required>
+                </div>
+                
+                <div class="option-group">
+                    <div class="form-group">
+                        <label class="form-label">Option 1</label>
+                        <input type="text" class="form-control" name="option1${i}" placeholder="Enter option 1" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Option 2</label>
+                        <input type="text" class="form-control" name="option2${i}" placeholder="Enter option 2" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Option 3</label>
+                    <input type="text" class="form-control" name="option3${i}" placeholder="Enter option 3" required>
+                </div>
+                
+                <div class="answer-score-group">
+                    <div class="form-group">
+                        <label class="form-label">Answer</label>
+                        <input type="text" class="form-control" name="answer${i}" placeholder="Enter correct answer" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Score</label>
+                        <input type="number" class="form-control" name="score${i}" placeholder="Enter score value" required>
+                    </div>
+                </div>
+            `;
+            container.appendChild(questionDiv);
+        }
+    });
+</script>
+
+{% include 'footer.html' %}
