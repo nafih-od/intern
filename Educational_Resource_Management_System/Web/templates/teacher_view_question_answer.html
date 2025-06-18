@@ -1,0 +1,293 @@
+{% include 'teacher_header.html' %}
+
+<style>
+    /* Modern styling for MCQ question paper viewer */
+    :root {
+        --primary: #03A9F4;
+        --primary-dark: #0288D1;
+        --secondary: #455A64;
+        --light-bg: #f9f9f9;
+        --border: #e0e0e0;
+        --text: #212121;
+        --success: #4CAF50;
+        --success-light: rgba(76, 175, 80, 0.15);
+        --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    body {
+        font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        background-color: #f5f5f5;
+        color: var(--text);
+        line-height: 1.6;
+    }
+    
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 30px 15px;
+    }
+    
+    .paper-header {
+        margin-bottom: 25px;
+        text-align: center;
+        position: relative;
+    }
+    
+    .paper-title {
+        font-size: 1.8rem;
+        color: var(--primary-dark);
+        margin-bottom: 5px;
+        font-weight: 600;
+    }
+    
+    .paper-subtitle {
+        font-size: 1rem;
+        color: var(--secondary);
+        margin-bottom: 20px;
+    }
+    
+    .question-paper {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        margin-bottom: 30px;
+    }
+    
+    .paper-info {
+        background-color: var(--light-bg);
+        padding: 15px 20px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .paper-meta {
+        font-size: 0.9rem;
+        color: var(--secondary);
+    }
+    
+    .paper-meta strong {
+        color: var(--primary-dark);
+    }
+    
+    .question-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    
+    .question-table th {
+        background-color: var(--primary);
+        color: white;
+        font-weight: 500;
+        padding: 12px 15px;
+        text-align: left;
+        position: sticky;
+        top: 0;
+    }
+    
+    .question-table td {
+        padding: 14px 15px;
+        border-bottom: 1px solid var(--border);
+        vertical-align: top;
+    }
+    
+    .question-table tr:nth-child(even) {
+        background-color: #f8f8f8;
+    }
+    
+    .question-table tr:hover {
+        background-color: rgba(3, 169, 244, 0.05);
+    }
+    
+    .question-number {
+        font-weight: 600;
+        color: var(--primary-dark);
+        text-align: center;
+        width: 50px;
+    }
+    
+    .question-text {
+        font-weight: 500;
+    }
+    
+    .options-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+    
+    .option {
+        position: relative;
+        padding: 8px 10px;
+        background-color: #f5f5f5;
+        border-radius: 4px;
+        font-size: 0.95rem;
+    }
+    
+    .correct-answer {
+        background-color: var(--success-light);
+        border-left: 3px solid var(--success);
+        font-weight: 500;
+    }
+    
+    .score-badge {
+        display: inline-block;
+        padding: 4px 8px;
+        background-color: var(--primary);
+        color: white;
+        border-radius: 15px;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+    
+    .answer-column {
+        width: 120px;
+        text-align: center;
+    }
+    
+    .answer-badge {
+        display: inline-block;
+        padding: 4px 10px;
+        background-color: var(--success);
+        color: white;
+        border-radius: 4px;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+    
+    .print-button {
+        background-color: var(--primary);
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        display: inline-flex;
+        align-items: center;
+        transition: background-color 0.2s;
+    }
+    
+    .print-button:hover {
+        background-color: var(--primary-dark);
+    }
+    
+    .print-button svg {
+        margin-right: 5px;
+    }
+    
+    @media print {
+        .container {
+            padding: 0;
+        }
+        
+        .paper-header {
+            margin-bottom: 15px;
+        }
+        
+        .print-button {
+            display: none;
+        }
+        
+        .question-paper {
+            box-shadow: none;
+            border: 1px solid #ddd;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .container {
+            padding: 15px 10px;
+        }
+        
+        .paper-title {
+            font-size: 1.5rem;
+        }
+        
+        .question-table th, 
+        .question-table td {
+            padding: 10px;
+        }
+        
+        .option {
+            padding: 6px 8px;
+        }
+    }
+</style>
+
+<div class="container">
+    <div class="paper-header">
+        <h1 class="paper-title">Assessment Question Paper</h1>
+        <p class="paper-subtitle">View all questions and options in this assessment</p>
+        <button class="print-button" onclick="window.print()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                <rect x="6" y="14" width="12" height="8"></rect>
+            </svg>
+            Print Question Paper
+        </button>
+    </div>
+    
+    <div class="question-paper">
+        <div class="paper-info">
+            <div class="paper-meta">
+                <strong>Title:</strong> {{ data.title if data.title else "Assessment Questions" }}
+            </div>
+            <div class="paper-meta">
+                <strong>Total Questions:</strong> {{ data['view']|length }}
+            </div>
+        </div>
+        
+        <table class="question-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Question</th>
+                    <th>Options</th>
+                    <th>Answer</th>
+                    <th>Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in data['view'] %}
+                <tr>
+                    <td class="question-number">{{ loop.index }}</td>
+                    <td class="question-text">{{ i['question'] }}</td>
+                    <td>
+                        <div class="options-container">
+                            <div class="option {% if i['answer'] == i['option_1'] %}correct-answer{% endif %}">A. {{ i['option_1'] }}</div>
+                            <div class="option {% if i['answer'] == i['option_2'] %}correct-answer{% endif %}">B. {{ i['option_2'] }}</div>
+                            <div class="option {% if i['answer'] == i['option_3'] %}correct-answer{% endif %}">C. {{ i['option_3'] }}</div>
+                            <div class="option correct-answer">D. {{ i['answer'] }}</div>
+                        </div>
+                    </td>
+                    <td class="answer-column">
+                        <div class="answer-badge">
+                            {% if i['answer'] == i['option_1'] %}A
+                            {% elif i['answer'] == i['option_2'] %}B
+                            {% elif i['answer'] == i['option_3'] %}C
+                            {% else %}D
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="score-badge">{{ i['score'] }} Points</div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    // If you need any additional JavaScript functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialization code if needed
+    });
+</script>
+
+{% include 'footer.html' %}

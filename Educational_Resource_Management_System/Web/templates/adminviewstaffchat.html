@@ -1,0 +1,58 @@
+{%include 'adminheader.html'%}
+<!-- ======= Hero Section ======= -->
+<div id="hero" class="hero route bg-image" style="background-image: url(static/assets/img/cyber1.webp)">
+    <div class="overlay-itro"></div>
+    <div class="hero-content display-table">
+      <div class="table-cell">
+        <div class="container">
+          <p class="hero-subtitle"><span class="typed" data-typed-items="WELCOME ADMIN!"></span></p>
+        </div>
+    </div>
+  </div>
+</div><!-- End Hero Section -->
+
+
+<div class="aa">
+  <h4 align="center">CHAT NOW</h2>
+</div>
+
+
+<table align="center">
+    {% for i in data['view'] %}
+    <tr>
+        <td><img src="../static/assets/img/useravatar.png" height="50px" alt=""></td>
+        <td>{{i['fname']}}</td>
+        <td><a href="/chat?id={{i['login_id']}}">chat</a></td>
+    </tr>
+    {%endfor%}
+</table>
+
+
+
+<style>
+  .aa{
+    height: 100px;
+    border: 2px solid white;;
+    background-color: rgb(10, 132, 91);
+  }
+  h4{
+    color:white;
+    margin-top: 30px;
+  }
+  tr{
+    background-color: darkgrey;
+  }
+  table{
+    width: 1215px;
+  }
+  td{
+    color: white;
+    text-decoration: solid;
+    font-size: 20px;
+    font-style:italic;
+  }
+</style>
+
+
+
+{%include 'footer.html'%}

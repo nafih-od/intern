@@ -1,0 +1,137 @@
+{% include 'admin_header.html' %}
+
+<style>
+    /* Form container styles */
+    form {
+        background-color: #f9f9f9;
+        border: 2px solid #ccc;
+        border-radius: 10px;
+        padding: 20px;
+        max-width: 600px;
+        margin: 20px auto;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Input styles */
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 1rem;
+    }
+
+    /* Submit and Update button styles */
+    input[type="submit"] {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        margin-top: 10px;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1rem;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+
+    /* Card view styling */
+    .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .card {
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 15px;
+        width: 250px;
+        text-align: center;
+        border: 2px solid #ddd;
+    }
+
+    .card h3 {
+        margin: 10px 0;
+        color: #333;
+    }
+
+    .btn-container {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+    }
+
+    .btn {
+        text-decoration: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+
+    .btn-outline-success {
+        border: 1px solid #28a745;
+        color: #28a745;
+    }
+
+    .btn-outline-success:hover {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .btn-outline-danger {
+        border: 1px solid #dc3545;
+        color: #dc3545;
+    }
+
+    .btn-outline-danger:hover {
+        background-color: #dc3545;
+        color: white;
+    }
+</style>
+
+<center style="margin-top: 7%; padding-top: 4%;">
+    <h2>Add Subject</h2><br>
+    <form method="post">
+        {% if data['up'] %}
+        <table>
+            <tr>
+                <td>Subject</td>
+                <td><input type="text" name="subject" value="{{ data['up'][0]['subject'] }}"></td>
+            </tr>
+        </table>
+        <input type="submit" value="Update" name="update">
+        {% else %}
+        <table>
+            <tr>
+                <td>Subject</td>
+                <td><input type="text" name="subject" id="name" required></td>
+            </tr>
+        </table>
+        <input type="submit" value="Add" name="submit">
+    </form>
+
+    <center style="padding-top: 7%; padding-bottom: 10%;">
+        <h2 style="margin-bottom: 2%;">Subjects</h2>
+        <div class="card-container">
+            {% for i in data['view'] %}
+            <div class="card">
+                <h4>{{ i['subject'] }}</h4>
+                <div class="btn-container">
+                    <a href="?action=update&id={{ i['subject_id'] }}" class="btn btn-outline-success">Update</a>
+                    <a href="?action=delete&id={{ i['subject_id'] }}" class="btn btn-outline-danger">Delete</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    </center>
+
+{% include 'footer.html' %}

@@ -1,0 +1,177 @@
+{% include 'teacher_header.html' %}
+
+<style>
+    /* Form container styles */
+    form {
+        background-color: #f9f9f9;
+        border: 2px solid #ccc;
+        border-radius: 10px;
+        padding: 20px;
+        max-width: 600px;
+        margin: 20px auto;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .note-card {
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 300px;
+        padding: 15px;
+        text-align: center;
+    }
+
+    .note-card img, .note-card video {
+        width: 100%;
+        border-radius: 5px;
+        max-height: 200px;
+        object-fit: contain;
+    }
+
+    .note-card h4 {
+        color: #333;
+        margin: 10px 0;
+    }
+
+    .note-card p {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 10px;
+    }
+
+    .note-actions {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .delete-btn {
+        display: inline-block;
+        background-color: #ff4d4d;
+        color: white;
+        padding: 8px 12px;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+
+    .download-btn {
+        display: inline-block;
+        background-color: #4d94ff;
+        color: white;
+        padding: 8px 12px;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+
+    .open-btn {
+        display: inline-block;
+        background-color: #4CAF50;
+        color: white;
+        padding: 8px 12px;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+
+    .delete-btn:hover {
+        background-color: #cc0000;
+    }
+
+    .download-btn:hover {
+        background-color: #0066cc;
+    }
+    
+    .open-btn:hover {
+        background-color: #3e8e41;
+    }
+    
+    .file-type-indicator {
+        background-color: #f0f0f0;
+        border-radius: 4px;
+        padding: 3px 8px;
+        font-size: 12px;
+        display: inline-block;
+        margin-bottom: 10px;
+    }
+
+    .pdf-embed {
+        width: 100%;
+        height: 150px;
+        border: 1px solid #ddd;
+    }
+
+    
+</style>
+
+<center style="padding-top: 7%; padding-bottom: 5%;">
+    <h2>Add Note</h2><br>
+    <form method="post" enctype="multipart/form-data">
+        <table>
+            <tr>
+                <td>Title</td>
+                <td><input type="text" name="title" required></td>
+            </tr>
+            <tr>
+                <td>File</td>
+                <td><input type="file" name="file" accept="video/*,image/*,.pdf" required></td>
+            </tr>
+            <tr>
+                <td colspan="2" style="padding-top: 10px; font-size: 12px; color: #666;">
+                    * You can upload video, image, or PDF files. Text summarization will only work for video files.
+                </td>
+            </tr>
+        </table>
+        <input type="submit" value="Upload" name="submit">
+    </form>
+
+    <h2 style="margin-bottom: 2%; margin-top: 6rem;">Notes</h2>
+    <div class="card-container">
+        {% for j in data1['view_d'] %}
+        <div class="note-card">
+            <h4>{{ j['title'] }}</h4>
+            <span class="file-type-indicator">{{ j['type'] }}</span>
+            
+            {% if j['type'] == 'video' %}
+                <video controls>
+                    <source src="{{ j['file'] }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                {% if j['summarization'] %}
+                <p><strong>Summarization:</strong> {{ j['summarization'] }}</p>
+                {% endif %}
+            {% elif j['type'] == 'pdf' %}
+                <div class="pdf-embed">
+                    <embed src="{{ j['file'] }}" type="application/pdf" width="100%" height="100%">
+                </div>
+            {% elif j['type'] == 'image' %}
+                <img src="{{ j['file'] }}" alt="Image File">
+            {% else %}
+                <p>Unsupported file type</p>
+            {% endif %}
+            
+            <p><strong>Date:</strong> {{ j['date'] }}</p>
+            
+            <div class="note-actions">
+                <a href="?action=delete&id={{ j['note_id'] }}" class="delete-btn">Delete</a>
+                {% if j['type'] == 'pdf' %}
+                <a href="{{ j['file'] }}" target="_blank" class="open-btn">Open</a>
+                <a href="{{ j['file'] }}" download class="download-btn">Download</a>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</center>
+
+{% include 'footer.html' %}

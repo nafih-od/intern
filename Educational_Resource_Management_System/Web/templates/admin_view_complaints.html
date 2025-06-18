@@ -1,0 +1,96 @@
+{% include 'admin_header.html' %}
+
+<style>
+        /* Container for the complaint cards */
+        .complaint-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        padding: 20px;
+    }
+
+    /* Individual complaint card */
+    .complaint-card {
+        background-color: #fff;
+        width: 400px;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: 0.3s;
+        border-left: 5px solid #03A9F4;
+        position: relative;
+    }
+
+    /* Hover effect */
+    .complaint-card:hover {
+        transform: scale(1.02);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Complaint details */
+    .complaint-card h3 {
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+        color: #333;
+    }
+
+    .complaint-card p {
+        font-size: 1rem;
+        color: #555;
+        margin-bottom: 10px;
+    }
+
+    /* Reply form */
+    .reply-form textarea {
+        width: 100%;
+        height: 80px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 8px;
+        font-size: 1rem;
+        resize: none;
+    }
+
+    .reply-form input[type="submit"] {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        margin-top: 8px;
+    }
+
+    /* Hover effect for button */
+    .reply-form input[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+
+</style>
+
+<center style="margin-top: 7%; padding-top: 7%; padding-bottom: 10%;">
+    <h2 style="margin-bottom: 2%;">Complaints</h2>
+
+    <div class="complaint-container">
+        {% for i in data['view'] %}
+        <div class="complaint-card">
+            <h3>Complaint #{{ loop.index }}</h3>
+            <p><strong>Complaint:</strong> {{ i['complaint'] }}</p>
+            <p><strong>Date:</strong> {{ i['date'] }}</p>
+
+            <form method="post" class="reply-form">
+                <input type="hidden" name="complaint_id" value="{{ i['complaint_id'] }}">
+                <textarea name="reply" placeholder="Type your reply..." required></textarea>
+                <input type="submit" name="reply" value="Send Reply">
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+</center>
+
+    {% include 'footer.html' %}
+
+
+

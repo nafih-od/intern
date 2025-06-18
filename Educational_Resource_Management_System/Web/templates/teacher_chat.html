@@ -1,0 +1,94 @@
+{% include 'teacher_header.html' %}
+
+
+
+<style>
+    
+    form {
+        background-color: #f9f9f9;
+        border: 2px solid #ccc;
+        border-radius: 10px;
+        padding: 20px;
+        max-width: 600px;
+        margin: 20px auto;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    table {
+        width: 100%;
+    }
+
+    /* Table cells styles */
+    td {
+        padding: 10px;
+        font-size: 1rem;
+        color: #010407;
+    }
+
+    /* Input styles */
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 1rem;
+    }
+
+    /* Submit and Update button styles */
+    input[type="submit"] {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1rem;
+    }
+
+    /* Hover effects for the buttons */
+    input[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+
+    /* Spacing between fields */
+    td input {
+        margin-top: 5px;
+        margin-bottom: 10px;
+    }
+
+    /* Headings or labels */
+    td:first-child {
+        font-weight: bold;
+    }
+</style>
+
+<center style="margin-top: 7%; padding-top: 4%;">
+    <h2 style="margin-bottom: 2%;">Chat with Student</h2>
+    <!-- Chat history section -->
+    <div style="border: 1px solid #ccc; padding: 15px; max-width: 600px; margin: 0 auto; background-color: #f9f9f9;">
+        <h4>Chat History</h4>
+        <div style="max-height: 300px; overflow-y: auto;">
+            {% if data['view'] %}
+                {% for i in data['view'] %}
+                    <p>
+                        <strong>{{ 'You' if i['sender_type'] == 'teacher' else 'Student' }}:</strong> {{ i['message'] }}
+                        <br><small>{{ i['date'] }} {{ i['time'] }}</small>
+                    </p>
+                {% endfor %}
+            {% else %}
+                <p>No messages yet.</p>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Message sending form -->
+    <form method="POST" action="/teacher_chat?id={{ request.args['id'] }}" style="max-width: 600px; margin-top: 20px;">
+        <textarea name="message" placeholder="Type your message here..." rows="4" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;"></textarea>
+        <input type="submit" value="Send Message" style="margin-top: 10px;">
+    </form>
+</center>
+
+
+{% include 'footer.html' %}
